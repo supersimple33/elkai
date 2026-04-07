@@ -25,3 +25,15 @@ def test_solution_w():
     from elkai.utils import path_distance
 
     assert elkai.Coordinates2D({'city1': (0, 0), 'city2': (1, 1), 'city3': (2, 2)}).solve_tsp() == ['city1', 'city2', 'city3', 'city1']
+
+
+def test_verbose_toggle_and_validation():
+    cities = {'city1': (0, 0), 'city2': (1, 1), 'city3': (2, 2)}
+
+    # Smoke test both toggle states.
+    elkai.Coordinates2D(cities).solve_tsp(verbose=False)
+    elkai.Coordinates2D(cities).solve_tsp(verbose=True)
+
+    with pytest.raises(ValueError):
+        elkai.Coordinates2D(cities).solve_tsp(verbose=1)
+

@@ -11,16 +11,23 @@ class DistanceMatrix(object):
         
         self.distances = distances
 
-    def solve_tsp(self, runs=10) -> List[int]:
-        """Returns a list of indices that represent the TSP tour. You can adjust solver iterations with the runs parameter."""
+    def solve_tsp(self, runs=10, verbose=True) -> List[int]:
+        """Returns a list of indices that represent the TSP tour.
+
+        You can adjust solver iterations with the runs parameter and enable
+        solver logs by setting verbose=True.
+        """
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
+        if not isinstance(verbose, bool):
+            raise ValueError("verbose must be a boolean")
         
         dimension = len(self.distances)
         if dimension < 3:
             raise ValueError("dimension must be at least 3")
 
-        params = f"RUNS = {runs}\nPROBLEM_FILE = :stdin:\n"
+        trace_level = 1 if verbose else 0
+        params = f"RUNS = {runs}\nTRACE_LEVEL = {trace_level}\nPROBLEM_FILE = :stdin:\n"
 
         problem_type = "ATSP"
         if utils.is_symmetric_matrix(self.distances):
@@ -59,11 +66,17 @@ class Coordinates2D(object):
         
         self.coords = coords
 
-    def solve_tsp(self, runs=10) -> List[str]:
-        """Returns a list of city names in the order of the TSP tour. You can adjust solver iterations with the runs parameter."""
+    def solve_tsp(self, runs=10, verbose=True) -> List[str]:
+        """Returns a list of city names in the order of the TSP tour.
+
+        You can adjust solver iterations with the runs parameter and enable
+        solver logs by setting verbose=True.
+        """
         
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
+        if not isinstance(verbose, bool):
+            raise ValueError("verbose must be a boolean")
         
         keys = list(self.coords.keys())
         
@@ -72,7 +85,8 @@ class Coordinates2D(object):
         numbers_to_keys = {num: key for key, num in keys_to_numbers.items()}
 
         dimension = len(keys)
-        params = f"RUNS = {runs}\nPROBLEM_FILE = :stdin:\n"
+        trace_level = 1 if verbose else 0
+        params = f"RUNS = {runs}\nTRACE_LEVEL = {trace_level}\nPROBLEM_FILE = :stdin:\n"
         problem = f"TYPE : TSP\nDIMENSION : {dimension}\nEDGE_WEIGHT_TYPE : EUC_2D\nNODE_COORD_SECTION\n"
         for key, num in keys_to_numbers.items():
             coord_list = [str(x) for x in self.coords[key]]

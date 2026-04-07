@@ -34,3 +34,18 @@ def test_solution_w():
     for case in cases:
         sol = elkai.DistanceMatrix(case.input).solve_tsp()
         assert path_distance(sol, case.input) == case.distance
+
+
+def test_verbose_toggle_and_validation():
+    matrix = [
+        [0, 4, 0],
+        [0, 0, 5],
+        [0, 0, 0],
+    ]
+
+    # Smoke test both toggle states.
+    elkai.DistanceMatrix(matrix).solve_tsp(verbose=False)
+    elkai.DistanceMatrix(matrix).solve_tsp(verbose=True)
+
+    with pytest.raises(ValueError):
+        elkai.DistanceMatrix(matrix).solve_tsp(verbose=1)
