@@ -11,11 +11,15 @@ class DistanceMatrix(object):
         
         self.distances = distances
 
-    def solve_tsp(self, runs=10, verbose=True) -> List[int]:
+    def solve_tsp(self, runs=10, verbose=True, seed=1) -> List[int]:
         """Returns a list of indices that represent the TSP tour.
 
         You can adjust solver iterations with the runs parameter and enable
-        solver logs by setting verbose=True.
+        solver logs by setting verbose=True. The seed parameter can be used 
+        to set the random seed for the solver.
+        The runs parameter controls the number of iterations the solver will 
+        perform. More runs can lead to better solutions but will take more 
+        time.
         """
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
@@ -27,7 +31,7 @@ class DistanceMatrix(object):
             raise ValueError("dimension must be at least 3")
 
         trace_level = 1 if verbose else 0
-        params = f"RUNS = {runs}\nTRACE_LEVEL = {trace_level}\nPROBLEM_FILE = :stdin:\n"
+        params = f"RUNS = {runs}\nTRACE_LEVEL = {trace_level}\nSEED = {seed}\nPROBLEM_FILE = :stdin:\n"
 
         problem_type = "ATSP"
         if utils.is_symmetric_matrix(self.distances):
@@ -66,11 +70,15 @@ class Coordinates2D(object):
         
         self.coords = coords
 
-    def solve_tsp(self, runs=10, verbose=True) -> List[str]:
+    def solve_tsp(self, runs=10, verbose=True, seed=1) -> List[str]:
         """Returns a list of city names in the order of the TSP tour.
 
         You can adjust solver iterations with the runs parameter and enable
-        solver logs by setting verbose=True.
+        solver logs by setting verbose=True. The seed parameter can be used 
+        to set the random seed for the solver.
+        The runs parameter controls the number of iterations the solver will 
+        perform. More runs can lead to better solutions but will take more 
+        time.
         """
         
         if not isinstance(runs, int) or runs < 1:
@@ -86,7 +94,7 @@ class Coordinates2D(object):
 
         dimension = len(keys)
         trace_level = 1 if verbose else 0
-        params = f"RUNS = {runs}\nTRACE_LEVEL = {trace_level}\nPROBLEM_FILE = :stdin:\n"
+        params = f"RUNS = {runs}\nTRACE_LEVEL = {trace_level}\nSEED = {seed}\nPROBLEM_FILE = :stdin:\n"
         problem = f"TYPE : TSP\nDIMENSION : {dimension}\nEDGE_WEIGHT_TYPE : EUC_2D\nNODE_COORD_SECTION\n"
         for key, num in keys_to_numbers.items():
             coord_list = [str(x) for x in self.coords[key]]

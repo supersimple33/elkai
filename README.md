@@ -45,7 +45,8 @@ cities = elkai.DistanceMatrix([
 print(cities.solve_tsp()) # Output: [0, 2, 1, 0]
 ```
 
-Set `verbose=False` (default) to keep solver output quiet.
+Set `verbose=False` (default=True) to keep solver output quiet.
+Set `seed=i` (default=1) to control the random seed for the solver.
 
 > **Note**
 >
